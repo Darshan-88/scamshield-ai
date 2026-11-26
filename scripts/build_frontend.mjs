@@ -1,0 +1,10 @@
+import {cp, mkdir, writeFile, rm} from 'node:fs/promises';
+import {resolve} from 'node:path';
+const origin = process.env.PUBLIC_API_ORIGIN;
+if (!origin) throw Error('Set PUBLIC_API_ORIGIN to your Render HTTPS origin');
+const url = new URL(origin);
+if (url.protocol !== 'https:' || url.origin !== origin || !url.hostname.endsWith('.onrender.com')) throw Error('Expected exact https://SERVICE.onrender.com origin (no slash)');
+await rm('dist', {recursive:true,force:true});
+await mkdir('dist');
+await cp('frontend','dist',{recursive:true});
+await writeFile(resolve('dist/config.js'),`window.SCAMS_API_ORIGIN = ${JSON.stringify(origin)};\n`);

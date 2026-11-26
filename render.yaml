@@ -1,0 +1,34 @@
+services:
+- type: web
+  name: scamshield-api
+  runtime: docker
+  plan: free
+  dockerfilePath: ./Dockerfile
+  autoDeployTrigger: checksPass
+  healthCheckPath: /api/health/ready
+  envVars:
+  - key: APP_ENV
+    value: production
+  - key: RATE_LIMIT_BACKEND
+    value: database
+  - key: DATABASE_URL
+    fromDatabase:
+      name: scamshield-db
+      property: connectionString
+  - key: JWT_SECRET
+    generateValue: true
+  - key: GEMINI_DAILY_LIMIT
+    value: '100'
+  - key: VIRUSTOTAL_DAILY_LIMIT
+    value: '500'
+  - key: REQUIRE_REAL_DATASET
+    value: '0'
+  region: singapore
+  dockerCommand: sh -c "python -m alembic upgrade head && exec sh scripts/start.sh"
+databases:
+- name: scamshield-db
+  plan: free
+  databaseName: scamshield
+  user: scamshield
+  ipAllowList: []
+  region: singapore

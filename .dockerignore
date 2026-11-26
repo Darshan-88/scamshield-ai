@@ -1,0 +1,13 @@
+.git
+.github
+.venv
+**/__pycache__
+.pytest_cache
+.env*
+*.db*
+*.zip
+dist
+.vercel
+model-report.json
+tests
+samples
