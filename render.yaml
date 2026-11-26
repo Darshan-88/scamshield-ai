@@ -21,10 +21,12 @@ services:
     value: '100'
   - key: VIRUSTOTAL_DAILY_LIMIT
     value: '500'
+  - key: FRONTEND_ORIGINS
+    value: https://scamshield-ai-darshan-7df3.vercel.app,https://scamshield-ai-ruddy.vercel.app
   - key: REQUIRE_REAL_DATASET
     value: '0'
   region: singapore
-  dockerCommand: sh -c "python -m alembic upgrade head && exec sh scripts/start.sh"
+  dockerCommand: sh scripts/render-start.sh
 databases:
 - name: scamshield-db
   plan: free
